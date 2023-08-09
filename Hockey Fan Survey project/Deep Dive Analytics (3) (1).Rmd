@@ -1,0 +1,65 @@
+---
+title: "Interterm project"
+author: "Anna Goncharova"
+date: "2023-03-06"
+output: html_document
+---
+
+```{r}
+hockey <- read.csv("hockeyFanSurvey.csv")
+```
+
+
+```{r}
+library(ggplot2)
+library(ggmap)
+library(ggdark)
+
+
+
+location <- data.frame(lat = as.numeric(hockey$LocationLatitude),
+                       long = as.numeric(hockey$LocationLongitude))
+
+us <- c(left = -125, bottom = 25.75, right = -67, top = 49)
+map <- get_stamenmap(us, zoom = 5, maptype = "toner-lite") %>% ggmap() 
+
+map + geom_point(data = location, aes(x = long, y = lat), color = "red")
+
+
+
+```
+
+```{r}
+library(ggdark)
+
+# Create a histogram of Q40 values using ggdark
+ggplot(hockey, aes(x = Q40)) +
+  geom_histogram(color = "white", fill = "#5c849c", bins = 5) +
+  labs(x = "Age", y = "Frequency", title = "Distribution of Ages") +
+  theme_dark()+
+  theme(plot.background = element_rect(fill = "#dadada"),
+        panel.background = element_rect(fill = "#dadada"),
+        axis.text.x = element_text(color = "black"),
+        axis.text.y = element_text(color = "black"),
+        panel.grid = element_blank())
+```
+
+```{r}
+library(ggdark)
+
+summary(hockey$Q3)
+
+hockey$Q3 <- as.numeric(hockey$Q3)
+
+# Create a histogram of Q40 values using ggdark
+ggplot(hockey, aes(x = Q3)) +
+  geom_bar(color = "black", fill = "#2d426e", bins = 5, stat = "count") +
+  labs(x = "Age", y = "Frequency", title = "Years of Attendance") +
+  theme_dark()+
+  theme(plot.background = element_rect(fill = "#dadada"),
+        panel.background = element_rect(fill = "#dadada"),
+        axis.text.x = element_text(color = "black"),
+        axis.text.y = element_text(color = "black"),
+        panel.grid = element_blank())
+
+```
